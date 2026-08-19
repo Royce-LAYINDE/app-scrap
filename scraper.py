@@ -187,10 +187,14 @@ def scraper_autos(nb_pages):
 
             for container in containers:
                 try:
+                    # quelques annonces n'affichent pas le kilometrage
+                    kilometrage = container.find_elements(By.CSS_SELECTOR,
+                                                          'div.ad-vehicle-mileage div.value')
+
                     dic = {
                         'titre': container.find_element(By.TAG_NAME, 'h4').get_attribute('title'),
                         'prix': container.find_element(By.CSS_SELECTOR, 'div.ad-vehicle-price div.value').text,
-                        'kilometrage': container.find_element(By.CSS_SELECTOR, 'div.ad-vehicle-mileage div.value').text,
+                        'kilometrage': kilometrage[0].text if kilometrage else None,
                         'boite_vitesses': container.find_element(By.CSS_SELECTOR, 'div.transmission span').text,
                         'region': container.find_element(By.CSS_SELECTOR, 'div.location').text,
                         'lien': container.get_attribute('href')
